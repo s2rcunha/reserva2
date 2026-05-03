@@ -1,0 +1,201 @@
+1514:                     Gestão de EPRs
+1515-                     {eprWarningsBadgeCount > 0 && (
+1516-                       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-[10px] font-bold text-white shadow-lg animate-pulse">
+1517-                         {eprWarningsBadgeCount}
+1518-                       </span>
+1519-                     )}
+1520-                  </button>
+1521-                </motion.div>
+1522-              )}
+1523-            </AnimatePresence>
+1524-          </div>
+1525-          <button onClick={() => { setView('STOCK'); setIsMobileMenuOpen(false); }} className={cn("nav-btn text-slate-400 hover:text-white hover:bg-white/5", view === 'STOCK' && "active bg-white/10 text-white")}>
+1526-             <Boxes size={18} /> Consumo e Duradouro
+1527-          </button>
+1528-          <button onClick={() => { setView('INVENTORY'); setIsMobileMenuOpen(false); }} className={cn("nav-btn text-slate-400 hover:text-white hover:bg-white/5", view === 'INVENTORY' && "active bg-white/10 text-white")}>
+1529-             <CheckSquare size={18} /> Inventariar
+1530-          </button>
+1531-          <button onClick={() => { setView('COMPARE'); setIsMobileMenuOpen(false); }} className={cn("nav-btn text-slate-400 hover:text-white hover:bg-white/5", view === 'COMPARE' && "active bg-white/10 text-white")}>
+1532-             <Database size={18} /> Comparador BMP
+1533-          </button>
+1534-          {currentUser?.nivel === 'ADMIN' && (
+1535-            <div className="flex flex-col gap-1">
+1536-              <button 
+1537-                onClick={() => setShowAdminMenu(!showAdminMenu)} 
+1538-                className={cn("nav-btn justify-between text-slate-400 hover:text-white", showAdminMenu && "text-white bg-white/5")}
+1539-              >
+1540-                <div className="flex items-center gap-3">
+1541-                  <Settings size={18} /> Administração
+1542-                </div>
+1543-                {showAdminMenu ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+1544-              </button>
+1545-              
+1546-              <AnimatePresence>
+1547-                {showAdminMenu && (
+1548-                  <motion.div 
+1549-                    initial={{ height: 0, opacity: 0 }}
+1550-                    animate={{ height: 'auto', opacity: 1 }}
+1551-                    exit={{ height: 0, opacity: 0 }}
+1552-                    className="overflow-hidden flex flex-col gap-1 pl-4"
+1553-                  >
+1554-                    <button onClick={() => { setView('ADMIN'); setIsMobileMenuOpen(false); }} className={cn("nav-btn text-xs py-3 text-slate-400 hover:text-white", view === 'ADMIN' && "active bg-white/10 text-white")}>
+1555-                      <Users size={16} /> Gestão de Pessoal
+1556-                    </button>
+1557-                    
+1558-                    <button onClick={generateAnalyticReport} className="nav-btn text-xs py-3 text-emerald-400 hover:text-white hover:bg-emerald-500/10">
+1559-                      <FileText size={16} /> Relatório Analítico
+1560-                    </button>
+1561-                    
+1562-                    <div className="flex flex-col gap-1">
+1563-                      <button 
+1564-                        onClick={() => setShowSettingsMenu(!showSettingsMenu)} 
+1565-                        className={cn("nav-btn text-xs py-3 justify-between text-slate-400 hover:text-white", showSettingsMenu && "text-white bg-white/5")}
+1566-                      >
+1567-                        <div className="flex items-center gap-2">
+1568-                          <Settings size={14} /> Configurações
+1569-                        </div>
+1570-                        {showSettingsMenu ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+1571-                      </button>
+1572-                      <AnimatePresence>
+1573-                        {showSettingsMenu && (
+1574-                          <motion.div 
+1575-                            initial={{ height: 0, opacity: 0 }}
+1576-                            animate={{ height: 'auto', opacity: 1 }}
+1577-                            exit={{ height: 0, opacity: 0 }}
+1578-                            className="overflow-hidden flex flex-col gap-1 pl-4"
+1579-                          >
+1580-                            <button onClick={() => { setShowSectorModal(true); setIsMobileMenuOpen(false); }} className="nav-btn text-[10px] py-2 text-slate-400 hover:text-white">
+1581-                              <Boxes size={14} /> Gerenciar Setores
+1582-                            </button>
+1583-                          </motion.div>
+1584-                        )}
+1585-                      </AnimatePresence>
+1586-                    </div>
+1587-
+1588-                    <button onClick={() => { setView('AUDIT'); setIsMobileMenuOpen(false); }} className={cn("nav-btn text-xs py-3 text-slate-400 hover:text-white", view === 'AUDIT' && "active bg-white/10 text-white")}>
+1589-                      <ShieldAlert size={16} /> Log de Auditoria
+1590-                    </button>
+1591-                  </motion.div>
+1592-                )}
+1593-              </AnimatePresence>
+1594-            </div>
+1595-          )}
+1596-        </nav>
+1597-
+1598-        <div className="mt-auto">
+1599-          {/* Usuários Online */}
+1600-          {onlineUsers.length > 1 && (
+1601-            <div className="p-4 bg-emerald-500/10 rounded-2xl mb-4 border border-emerald-500/20">
+1602-               <div className="flex items-center gap-2 mb-2">
+1603-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+1604-                  <p className="text-[9px] text-emerald-400 uppercase font-black">Militares Online ({onlineUsers.length})</p>
+1605-               </div>
+1606-               <div className="flex flex-wrap gap-1">
+1607-                  {onlineUsers.map(u => (
+1608-                    <div key={u.id} className="group relative">
+1609-                      <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px] font-black border border-white/10 hover:border-emerald-500 cursor-help transition-all">
+1610-                        {u.nome.charAt(0)}
+1611-                      </div>
+1612-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-[10px] text-white rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+1613-                        {u.nome}
+1614-                      </div>
+1615-                    </div>
+1616-                  ))}
+1617-               </div>
+1618-            </div>
+1619-          )}
+1620-
+1621-          <div className="p-4 bg-white/5 rounded-2xl mb-4">
+1622-             <p className="text-[9px] text-gray-500 uppercase font-black mb-1">Militar Identificado</p>
+1623-             <p className="font-bold text-sm truncate">{currentUser?.nome}</p>
+1624-             <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-md mt-2 inline-block">
+1625-                {currentUser?.nivel}
+1626-             </span>
+1627-          </div>
+1628-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-3 text-red-500 hover:text-white hover:bg-red-600/10 rounded-xl transition-all text-xs font-bold uppercase tracking-widest">
+1629-            <LogOut size={16} /> Encerrar Sessão
+1630-          </button>
+1631-          
+1632-          <div className="mt-8 pt-4 border-t border-white/5 text-center">
+1633-             <p className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.2em] mb-1">Desenvolvido por SGT R.CUNHA</p>
+1634-             <a 
+1635-               href="https://instagram.com/rcunhalrc" 
+1636-               target="_blank" 
+1637-               rel="noopener noreferrer" 
+1638-               className="text-[10px] text-pink-500 hover:text-pink-400 font-black transition-colors flex items-center justify-center gap-1.5"
+1639-             >
+1640-                <Instagram size={10} /> @rcunhalrc
+1641-             </a>
+1642-          </div>
+1643-        </div>
+1644-      </aside>
+1645-
+1646-      {/* Notifications Layer */}
+1647-      <div className="fixed top-8 right-8 z-[9999] flex flex-col gap-3 pointer-events-none">
+1648-        <AnimatePresence>
+1649-          {toasts.map(toast => (
+1650-            <motion.div
+1651-              key={toast.id}
+1652-              initial={{ opacity: 0, x: 20, scale: 0.9 }}
+1653-              animate={{ opacity: 1, x: 0, scale: 1 }}
+1654-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+1655-              className={cn(
+1656-                "px-6 py-4 rounded-2xl shadow-2xl border flex items-center gap-3 backdrop-blur-md min-w-[280px]",
+1657-                toast.type === 'join' ? "bg-emerald-500/90 border-emerald-400 text-white" : 
+1658-                toast.type === 'info' ? "bg-indigo-500/90 border-indigo-400 text-white" :
+1659-                toast.type === 'error' ? "bg-red-500/90 border-red-400 text-white" :
+1660-                "bg-gray-800/90 border-gray-700 text-gray-100"
+1661-              )}
+1662-            >
+1663-              <div className="p-2 bg-white/20 rounded-xl">
+1664-                 {toast.type === 'join' ? <CheckCircle size={18} /> : 
+1665-                  toast.type === 'info' ? <Database size={18} /> :
+1666-                  toast.type === 'error' ? <AlertTriangle size={18} /> :
+1667-                  <LogOut size={18} />}
+1668-              </div>
+1669-              <p className="text-xs font-black uppercase tracking-widest">{toast.msg}</p>
+1670-            </motion.div>
+1671-          ))}
+1672-        </AnimatePresence>
+1673-      </div>
+1674-
+1675-      {/* Main Container */}
+1676-      <main className="flex-1 p-4 md:p-10 overflow-y-auto min-h-screen w-full relative">
+1677-        {/* Mobile Header (Fixed/Sticky at top) */}
+1678-        <header className="lg:hidden flex items-center justify-between mb-6 bg-[#0F172A] p-4 rounded-2xl shadow-lg border border-white/5">
+1679-          <button onClick={() => setIsMobileMenuOpen(true)} className="p-2.5 bg-white/5 text-white rounded-xl hover:bg-white/10 transition-all">
+1680-            <Filter size={20} />
+1681-          </button>
+1682-          <div className="flex flex-col items-center">
+1683-            <div className="flex items-center gap-1.5">
+1684-               <Plane size={14} className="text-red-600" />
+1685-               <h2 className="text-xs font-black italic text-white leading-none uppercase tracking-tighter">SESCINC-CO</h2>
+1686-            </div>
+1687-          </div>
+1688-          <div className="w-10"></div> {/* Spacer for symmetry */}
+1689-        </header>
+1690-
+1691-        <div className="view-content">
+1692-          {view === 'DASHBOARD' && (
+1693-            <div key="dash-view-container">
+1694-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+1695-                <div>
+1696-                  <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter leading-none uppercase">PAINEL DE CONTROLE</h2>
+1697-                  <p className="text-gray-400 uppercase text-[9px] md:text-[10px] font-bold tracking-[0.2em] mt-2">Consolidado de Inteligência de Inventário - FAB</p>
+1698-                </div>
+1699-                <div className="flex gap-3 w-full md:w-auto">
+1700-                   {currentUser?.nivel === 'ADMIN' && (
+1701-                     <>
+1702-                       <button onClick={() => { setEditingMaterial({}); setShowMaterialModal(true); }} className="action-btn-main bg-red-600 text-white flex-1 md:flex-none justify-center">
+1703-                          <Plus size={20} /> Cadastrar <span className="hidden sm:inline">Material</span>
+1704-                       </button>
+1705-                     </>
+1706-                   )}
+1707-                </div>
+1708-              </div>
+1709-
+1710-              {/* Stats Cards - Resumo do Dashboard */}
+1711-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10">
+1712-                 <div className="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 flex flex-col justify-between">
+1713-                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-4">Total de BMPs Ativos</p>
+1714-                    <div className="flex items-end justify-between">
